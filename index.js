@@ -22,12 +22,25 @@ async function run() {
         await client.connect();
         const database = client.db('clayKingdom');
         const productCollection = database.collection("products");
-
+        const reviewCollection = database.collection("reviews")
         //top products
         app.get('/topProducts', async (req, res) => {
             const cursor = productCollection.find({});
             const products = await cursor.limit(6).toArray();
-            res.send(products)
+            res.send(products);
+        })
+
+        //all products
+        app.get('/allProducts', async (req, res) => {
+            const cursor = productCollection.find({});
+            const products = await cursor.toArray();
+            res.send(products);
+        })
+        //reviews
+        app.get('/reviews', async (req, res) => {
+            const cursor = reviewCollection.find({});
+            const reviews = await cursor.toArray();
+            res.send(reviews);
         })
 
     }
