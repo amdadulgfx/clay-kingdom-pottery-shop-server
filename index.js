@@ -23,9 +23,10 @@ async function run() {
         const database = client.db('clayKingdom');
         const productCollection = database.collection("products");
 
-        app.get('/products', async (req, res) => {
+        //top products
+        app.get('/topProducts', async (req, res) => {
             const cursor = productCollection.find({});
-            const products = await cursor.toArray();
+            const products = await cursor.limit(6).toArray();
             res.send(products)
         })
 
