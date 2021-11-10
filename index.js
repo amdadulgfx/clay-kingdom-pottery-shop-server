@@ -35,7 +35,15 @@ async function run() {
             const cursor = productCollection.find({});
             const products = await cursor.toArray();
             res.send(products);
-        })
+        });
+        //single products
+        app.get('/allProducts/:id', async (req, res) => {
+            const productId = req.params.id;
+            const query = { _id: ObjectId(productId) }
+            const product = await productCollection.findOne(query);
+            // const product = await products.toArray();
+            res.send(product);
+        });
         //reviews
         app.get('/reviews', async (req, res) => {
             const cursor = reviewCollection.find({});
