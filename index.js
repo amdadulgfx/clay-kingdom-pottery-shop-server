@@ -22,7 +22,8 @@ async function run() {
         await client.connect();
         const database = client.db('clayKingdom');
         const productCollection = database.collection("products");
-        const reviewCollection = database.collection("reviews")
+        const reviewCollection = database.collection("reviews");
+        const orderCollection = database.collection("orders");
         //top products
         app.get('/topProducts', async (req, res) => {
             const cursor = productCollection.find({});
@@ -41,7 +42,6 @@ async function run() {
             const productId = req.params.id;
             const query = { _id: ObjectId(productId) }
             const product = await productCollection.findOne(query);
-            // const product = await products.toArray();
             res.send(product);
         });
         //reviews
@@ -49,6 +49,40 @@ async function run() {
             const cursor = reviewCollection.find({});
             const reviews = await cursor.toArray();
             res.send(reviews);
+        })
+        // orders
+        app.get('/allOrders', async (req, res) => {
+            const cursor = orderCollection.find({});
+            const orders = await cursor.toArray();
+            res.json(orders);
+        })
+
+        //orders read from database of specific user
+        app.get('/orders', async (req, res) => {
+            const email = req.query.email;
+            console.log(email);
+            const query = { email: email }
+            const cursor = orderCollection.find(query)
+            const orders = await cursor.toArray()
+            console.log(orders);
+            res.json(orders)
+        })
+
+        //orders post to the database
+        app.post('/orders', async (req, res) => {
+            const data = req.body;
+            // console.log(req.body);
+
+            const order = await orderCollection.insertOne(data);
+            res.json('order')
+        })
+        //reviews post to the database
+        app.post('/reviews', async (req, res) => {
+            const data = req.body;
+            // console.log(req.body);
+
+            const order = await reviewCollection.insertOne(data);
+            res.json('order')
         })
 
     }
