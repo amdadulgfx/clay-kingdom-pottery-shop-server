@@ -60,30 +60,35 @@ async function run() {
         //orders read from database of specific user
         app.get('/orders', async (req, res) => {
             const email = req.query.email;
-            console.log(email);
+            // console.log(email);
             const query = { email: email }
             const cursor = orderCollection.find(query)
             const orders = await cursor.toArray()
-            console.log(orders);
+            // console.log(orders);
             res.json(orders)
         })
 
         //orders post to the database
         app.post('/orders', async (req, res) => {
             const data = req.body;
-            // console.log(req.body);
-
             const order = await orderCollection.insertOne(data);
             res.json('order')
         })
         //reviews post to the database
         app.post('/reviews', async (req, res) => {
             const data = req.body;
-            // console.log(req.body);
-
             const order = await reviewCollection.insertOne(data);
             res.json('order')
         })
+        //
+        //delete products
+        app.delete('/allOrders/:id', async (req, res) => {
+            const productId = req.params.id;
+            console.log(productId);
+            const query = { _id: ObjectId(productId) }
+            const product = await orderCollection.deleteOne(query);
+            res.json(product);
+        });
 
     }
 
