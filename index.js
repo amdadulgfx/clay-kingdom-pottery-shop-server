@@ -105,16 +105,24 @@ async function run() {
             res.json(product)
         })
         //
-        //delete products
+        //delete orders 
         app.delete('/allOrders/:id', async (req, res) => {
             const productId = req.params.id;
             // console.log(productId);
             const query = { _id: ObjectId(productId) }
-            const product = await orderCollection.deleteOne(query);
+            const order = await orderCollection.deleteOne(query);
+            res.json(order);
+        });
+        //delete products
+        app.delete('/allProducts/:id', async (req, res) => {
+            const productId = req.params.id;
+            // console.log(productId);
+            const query = { _id: ObjectId(productId) }
+            const product = await productCollection.deleteOne(query);
             res.json(product);
         });
 
-        //admin
+        //set admin update
         app.put('/users/admin', async (req, res) => {
             const user = req.body;
             console.log('put', user);
@@ -122,6 +130,15 @@ async function run() {
             const updateDoc = { $set: { role: 'admin' } };
             const result = await userCollection.updateOne(filter, updateDoc);
             res.json(result);
+        });
+        //status update
+        app.put('/allOrders/:id', async (req, res) => {
+            const productId = req.params.id;
+            const filter = { _id: ObjectId(productId) }
+            let order = req.body;
+            const updateDoc = { $set: order }
+            const result = await orderCollection.updateOne(filter, updateDoc);
+            res.json(result)
         })
 
     }
