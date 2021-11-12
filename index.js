@@ -98,6 +98,12 @@ async function run() {
             const user = await userCollection.insertOne(data);
             res.json(user)
         })
+        //products
+        app.post('/addProduct', async (req, res) => {
+            const data = req.body;
+            const product = await productCollection.insertOne(data);
+            res.json(product)
+        })
         //
         //delete products
         app.delete('/allOrders/:id', async (req, res) => {
